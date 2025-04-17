@@ -17,15 +17,19 @@ class VolunteeringController extends Controller
      */
     public function index()
     {
-        // Get the active project (assuming we only have one)
-        $project = Project::latest()->first();
+        // Get all active projects instead of just the latest one
+        $projects = Project::latest()->get();
         
-        $volunteerCount = 0;
-        $hasVolunteered = false;
-        $volunteerStatus = null;
+        // Initialize volunteer data
+        $volunteerData = [];
+        $hasVolunteeredForAny = false;
         
-        if ($project) {
+        // Process each project for volunteer data
+        foreach ($projects as $project) {
             $volunteerCount = Volunteer::where('project_id', $project->id)->count();
+            
+            $hasVolunteered = false;
+            $volunteerStatus = null;
             
             if (Auth::check()) {
                 $volunteer = Volunteer::where('user_id', Auth::id())
@@ -34,12 +38,19 @@ class VolunteeringController extends Controller
                     
                 if ($volunteer) {
                     $hasVolunteered = true;
+                    $hasVolunteeredForAny = true;
                     $volunteerStatus = $volunteer->status;
                 }
             }
+            
+            $volunteerData[$project->id] = [
+                'count' => $volunteerCount,
+                'hasVolunteered' => $hasVolunteered,
+                'status' => $volunteerStatus
+            ];
         }
         
-        return view('volunteer', compact('project', 'volunteerCount', 'hasVolunteered', 'volunteerStatus'));
+        return view('volunteer', compact('projects', 'volunteerData', 'hasVolunteeredForAny'));
     }
     
     /**

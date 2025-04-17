@@ -23,9 +23,9 @@
         </div>
     </div>
 
-    <!-- Recent Donations -->
+    <!-- Recent Campaigns -->
     <div class="mt-8 bg-gray-800 shadow-md rounded-lg p-6">
-        <h2 class="text-lg font-bold mb-4 text-gray-300">Recent Donations</h2>
+        <h2 class="text-lg font-bold mb-4 text-gray-300">Recent Campaigns</h2>
         <div class="overflow-x-auto">
             <table class="w-full border-collapse border border-gray-700">
                 <thead>

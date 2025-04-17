@@ -69,7 +69,7 @@
                             </svg>
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">Get updates about our causes and events</p>
+                    <p class="text-xs text-gray-500 mt-2">Get updates about our campaigns and events</p>
                 </form>
             </div>
 
@@ -78,7 +78,7 @@
                 <h3 class="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Quick Links</h3>
                 <ul class="space-y-2">
                     <li><a href="{{ route('about') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">About Us</a></li>
-                    <li><a href="{{ route('cause') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">Our Causes</a></li>
+                    <li><a href="{{ route('cause') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">Our Campaign</a></li>
                     <li><a href="{{ route('volunteer') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">Volunteer</a></li>
                     <li><a href="{{ route('contact') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">Contact Us</a></li>
                     <li><a href="{{ route('FAQ') }}" class="inline-block hover:text-yellow-500 transition duration-150 ease-in-out">FAQs</a></li>

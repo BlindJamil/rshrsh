@@ -69,11 +69,11 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <label class="flex items-center p-4 bg-gray-700 rounded-lg border border-gray-600 cursor-pointer hover:bg-gray-650">
             <input type="radio" name="cause_type" value="general" 
-                   {{ old('cause_type', $cause->is_recent ?? false ? '' : 'checked') }} required
+                   {{ old('cause_type', $cause->is_recent ?? true ? '' : 'checked') }} required
                    class="mr-2 text-yellow-500 focus:ring-yellow-500 h-4 w-4">
             <div>
-                <span class="text-white font-medium">General Cause</span>
-                <p class="text-sm text-gray-400">Ongoing causes with longer-term goals</p>
+                <span class="text-white font-medium">Donation Field Item</span>
+                <p class="text-sm text-gray-400">Displayed in the main donation field section</p>
             </div>
         </label>
         
@@ -82,8 +82,8 @@
                    {{ old('cause_type', $cause->is_recent ?? false ? 'checked' : '') }} required
                    class="mr-2 text-yellow-500 focus:ring-yellow-500 h-4 w-4">
             <div>
-                <span class="text-white font-medium">Recent Donation</span>
-                <p class="text-sm text-gray-400">Featured in the recent donations section</p>
+                <span class="text-white font-medium">Recent Campaign</span>
+                <p class="text-sm text-gray-400">Featured in the recent campaigns section</p>
             </div>
         </label>
     </div>
@@ -92,7 +92,7 @@
     @enderror
 </div>
 
-<!-- Is Urgent (Only for Recent Donations) -->
+<!-- Is Urgent (Only for Recent Campaigns) -->
 <div id="urgentOptions" class="mb-4 p-4 bg-gray-700 rounded-lg border border-gray-600 {{ old('cause_type', $cause->is_recent ?? false ? '' : 'hidden') }}">
     <label class="flex items-center">
         <input type="checkbox" name="is_urgent" id="is_urgent" 

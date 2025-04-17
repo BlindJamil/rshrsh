@@ -14,6 +14,8 @@ use App\Http\Controllers\UserDonationController;
 use App\Http\Controllers\AdminDonationController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,12 +49,7 @@ Route::post('/volunteer', [VolunteeringController::class, 'store'])->middleware(
 */
 Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login']);
-Route::post('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('/');
-})->name('logout');
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 Route::get('/dashboard', function () {
     if (!Auth::check()) {
@@ -72,7 +69,7 @@ Route::get('/dashboard', function () {
 | Admin Routes (Only Accessible by Admins)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -88,7 +85,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/causes/{id}', [CauseController::class, 'update'])->name('causes.update');
     Route::delete('/causes/{id}', [CauseController::class, 'destroy'])->name('causes.destroy');
     
-    // Recent Donations Management
+    // Recent Campaigns Management
     Route::post('/causes/store-recent-donation', [CauseController::class, 'storeRecentDonation'])->name('causes.store-recent-donation');
 
     // Donation Dashboard
@@ -170,5 +167,124 @@ Route::get('/mail-config', function () {
     return response()->json($config);
 });
 
+// Add a temporary route to create a super admin (REMOVE AFTER TESTING)
+Route::get('/create-admin', function () {
+    try {
+        // First, make sure the tables exist
+        if (!Schema::hasTable('admin_users')) {
+            return 'Error: admin_users table does not exist!';
+        }
+        
+        if (!Schema::hasTable('admin_roles')) {
+            return 'Error: admin_roles table does not exist!';
+        }
+        
+        if (!Schema::hasTable('admin_role_user')) {
+            return 'Error: admin_role_user table does not exist!';
+        }
+        
+        // Create or update admin user
+        $adminEmail = 'admin@test.com';
+        $adminPassword = 'admin123';
+        $adminName = 'Super Admin';
+        
+        $existingAdmin = DB::table('admin_users')->where('email', $adminEmail)->first();
+        
+        if ($existingAdmin) {
+            // Update existing admin
+            DB::table('admin_users')
+                ->where('email', $adminEmail)
+                ->update([
+                    'name' => $adminName,
+                    'password' => Hash::make($adminPassword),
+                    'updated_at' => now(),
+                ]);
+            $adminId = $existingAdmin->id;
+            $message = 'Admin user updated successfully!';
+        } else {
+            // Create new admin
+            $adminId = DB::table('admin_users')->insertGetId([
+                'name' => $adminName,
+                'email' => $adminEmail,
+                'password' => Hash::make($adminPassword),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $message = 'Admin user created successfully!';
+        }
+
+        // Create super_admin role if it doesn't exist
+        $roleId = null;
+        $role = DB::table('admin_roles')->where('name', 'super_admin')->first();
+        
+        if (!$role) {
+            $roleId = DB::table('admin_roles')->insertGetId([
+                'name' => 'super_admin',
+                'display_name' => 'Super Admin',
+                'description' => 'Full access to all features',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $message .= ' Super admin role created.';
+        } else {
+            $roleId = $role->id;
+        }
+
+        // Assign role to admin
+        $roleAssignment = DB::table('admin_role_user')
+            ->where('admin_user_id', $adminId)
+            ->where('admin_role_id', $roleId)
+            ->first();
+            
+        if (!$roleAssignment) {
+            DB::table('admin_role_user')->insert([
+                'admin_user_id' => $adminId,
+                'admin_role_id' => $roleId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            $message .= ' Role assigned to admin.';
+        }
+
+        // Try logging in with the admin to verify
+        $admin = \App\Models\Admin::where('email', $adminEmail)->first();
+        
+        if ($admin) {
+            Auth::guard('admin')->login($admin);
+            if (Auth::guard('admin')->check()) {
+                $message .= ' Admin login test successful!';
+            } else {
+                $message .= ' Warning: Admin login test failed.';
+            }
+        }
+
+        return $message . '<br><br>Admin Details:<br>Email: ' . $adminEmail . '<br>Password: ' . $adminPassword . 
+               '<br><br>You can now try logging in at <a href="/admin/login">Admin Login</a>';
+    } catch (\Exception $e) {
+        return 'Error creating Super Admin: ' . $e->getMessage() . '<br>Trace: ' . $e->getTraceAsString();
+    }
+});
+
+// Debug route to check admin users in the database (REMOVE AFTER TESTING)
+Route::get('/check-admin-users', function () {
+    $adminUsers = DB::table('admin_users')->get();
+    $adminRoles = DB::table('admin_roles')->get();
+    $adminRoleUser = DB::table('admin_role_user')->get();
+    
+    return [
+        'admin_users' => $adminUsers,
+        'admin_roles' => $adminRoles,
+        'admin_role_user' => $adminRoleUser
+    ];
+});
+
 // Breeze Authentication Routes
 require __DIR__.'/auth.php';
+
+// Regular user logout
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');

@@ -20,7 +20,7 @@
             <div class="hidden lg:flex lg:items-center lg:space-x-6">
                 <a href="{{ route('home') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('home') ? 'text-yellow-500' : '' }}">Home</a>
                 <a href="{{ route('about') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('about') ? 'text-yellow-500' : '' }}">About</a>
-                <a href="{{ route('cause') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('cause') ? 'text-yellow-500' : '' }}">Cause</a>
+                <a href="{{ route('cause') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('cause') ? 'text-yellow-500' : '' }}">Campaign</a>
                 <a href="{{ route('volunteer') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('volunteer') ? 'text-yellow-500' : '' }}">Volunteer</a>
                 <a href="{{ route('FAQ') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('FAQ') ? 'text-yellow-500' : '' }}">FAQ</a>
                 <a href="{{ route('contact') }}" class="text-white hover:text-yellow-500 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out {{ request()->routeIs('contact') ? 'text-yellow-500' : '' }}">Contact</a>
@@ -74,7 +74,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 mt-3 border-t border-gray-700">
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('home') ? 'bg-gray-800 text-yellow-500' : '' }}">Home</a>
                 <a href="{{ route('about') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('about') ? 'bg-gray-800 text-yellow-500' : '' }}">About</a>
-                <a href="{{ route('cause') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('cause') ? 'bg-gray-800 text-yellow-500' : '' }}">Cause</a>
+                <a href="{{ route('cause') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('cause') ? 'bg-gray-800 text-yellow-500' : '' }}">Campaign</a>
                 <a href="{{ route('volunteer') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('volunteer') ? 'bg-gray-800 text-yellow-500' : '' }}">Volunteer</a>
                 <a href="{{ route('FAQ') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('FAQ') ? 'bg-gray-800 text-yellow-500' : '' }}">FAQ</a>
                 <a href="{{ route('contact') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-yellow-500 hover:bg-gray-800 {{ request()->routeIs('contact') ? 'bg-gray-800 text-yellow-500' : '' }}">Contact</a>

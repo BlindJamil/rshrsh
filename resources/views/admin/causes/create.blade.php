@@ -4,7 +4,15 @@
 
 @section('content')
 <div class="bg-gray-900 min-h-screen text-white p-8">
-    <h1 class="text-3xl font-bold mb-6">Create a New Cause</h1>
+    <div class="md:flex md:items-center">
+        <div>
+            <h2 class="text-2xl font-medium leading-6 text-white">Create New Cause</h2>
+            <p class="mt-1 text-sm text-gray-500">Add a new cause to support your fundraising efforts. Urgent and active campaigns. These will appear in the Recent Campaigns section.</p>
+        </div>
+        <div class="ml-auto mt-4 md:mt-0">
+            <h1 class="text-3xl font-bold mb-6">Create a New Cause</h1>
+        </div>
+    </div>
 
     <div class="bg-gray-800 shadow-md rounded-lg p-6">
         <form action="{{ route('admin.causes.store') }}" method="POST" enctype="multipart/form-data">
@@ -33,15 +41,18 @@
             <div class="mb-6">
                 <label class="block text-gray-300 mb-2">Cause Type</label>
                 <div class="flex flex-col space-y-2">
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="cause_type" value="general" {{ old('cause_type') !== 'recent' ? 'checked' : '' }} class="text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500" id="general_cause">
-                        <span class="ml-2 text-gray-300">General Cause</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" name="cause_type" value="recent" {{ old('cause_type') === 'recent' ? 'checked' : '' }} class="text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500" id="recent_cause">
-                        <span class="ml-2 text-gray-300">Recent Donation</span>
-                    </label>
-                    <p class="text-gray-400 text-sm mt-1 ml-6">Select "Recent Donation" for time-sensitive campaigns. These will appear in the Recent Donations section.</p>
+                    <div class="mt-2 space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="cause_type" value="general" {{ old('cause_type') === 'general' ? 'checked' : '' }} class="text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500" id="general_cause">
+                            <span class="ml-2 text-gray-300">Donation Field Item</span>
+                        </label>
+                        <br>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="cause_type" value="recent" {{ old('cause_type') === 'recent' ? 'checked' : '' }} class="text-yellow-500 bg-gray-700 border-gray-600 focus:ring-yellow-500" id="recent_cause">
+                            <span class="ml-2 text-gray-300">Recent Campaign</span>
+                        </label>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-1 ml-6">Select "Recent Campaign" for time-sensitive campaigns. These will appear in the Recent Campaigns section.</p>
                 </div>
             </div>
 

@@ -50,6 +50,11 @@ class AdminDonationController extends Controller
             $query->where('donations.payment_method', $request->input('payment_method'));
         }
         
+        // Add the missing status filter
+        if ($request->filled('status')) {
+            $query->where('donations.status', $request->input('status'));
+        }
+        
         if ($request->filled('cause_id')) {
             $query->where('donations.cause_id', $request->input('cause_id'));
         }
@@ -125,50 +130,32 @@ class AdminDonationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'status' => 'required|in:pending,completed,cancelled,expired',
-            'admin_notes' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $donation = Donation::findOrFail($id);
         $oldStatus = $donation->status;
+        $newStatus = $request->status;
         
-        // If changing from pending to completed, update cause raised amount
-        if ($oldStatus === 'pending' && $request->input('status') === 'completed') {
-            $cause = Cause::find($donation->cause_id);
-            if ($cause) {
-                $cause->raised = $cause->raised + $donation->amount;
-                $cause->save();
-            }
-        }
-        
-        // If changing from completed to cancelled, subtract from cause raised amount
-        if ($oldStatus === 'completed' && $request->input('status') === 'cancelled') {
-            $cause = Cause::find($donation->cause_id);
-            if ($cause) {
-                $cause->raised = max(0, $cause->raised - $donation->amount);
-                $cause->save();
-            }
-        }
-        
-        $donation->status = $request->input('status');
-        $donation->admin_notes = $request->input('admin_notes');
-        
-        // If status is changing to completed, record completion date
-        if ($oldStatus !== 'completed' && $request->input('status') === 'completed') {
-            $donation->completed_at = now();
-        }
-        
+        $donation->status = $newStatus;
         $donation->save();
-        
-        return redirect()->route('admin.donations.show', $donation->id)
-            ->with('success', 'Donation status updated successfully.');
+
+        // If the status changed from pending to completed, update the cause raised amount
+        if ($oldStatus === 'pending' && $newStatus === 'completed') {
+            $cause = Cause::findOrFail($donation->cause_id);
+            $cause->raised += $donation->amount;
+            $cause->save();
+        }
+
+        // If the request wants a JSON response (AJAX request)
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Donation status updated successfully',
+                'donation' => $donation
+            ]);
+        }
+
+        // For regular form submissions
+        return redirect()->route('admin.donations.index')
+            ->with('success', 'Donation status updated successfully');
     }
     
     /**

@@ -112,146 +112,150 @@
 <section class="py-24 bg-gradient-to-b from-gray-900 to-gray-800" id="current-project">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
         <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Current Project</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Current Projects</h2>
             <div class="w-20 h-1 bg-yellow-500 mx-auto mb-6"></div>
-            <p class="text-gray-300 max-w-2xl mx-auto text-lg">Check out our current volunteer opportunity and join us in making a difference.</p>
+            <p class="text-gray-300 max-w-2xl mx-auto text-lg">Check out our volunteer opportunities and join us in making a difference.</p>
         </div>
         
-        @if($project)
-            <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
-                <div class="flex flex-col lg:flex-row">
-                    <!-- Project Image with fixed height and consistent aspect ratio -->
-                    <div class="lg:w-1/2 relative">
-                        <div class="h-full">
-                            <div class="h-64 sm:h-80 lg:h-full w-full">
-                                <img 
-                                    src="{{ $project->image ? asset('storage/' . $project->image) : asset('assets/img/donation1.jpg') }}" 
-                                    alt="{{ $project->title }}" 
-                                    class="w-full h-full object-cover"
-                                >
-                            </div>
-                        </div>
-                        <!-- Overlay badge for volunteers count -->
-                        <div class="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full text-sm font-medium">
-                            {{ $volunteerCount }} / {{ $project->volunteers_needed }} Volunteers
-                        </div>
-                    </div>
-                    
-                    <!-- Project Details -->
-                    <div class="lg:w-1/2 p-6 sm:p-8 lg:p-10">
-                        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-4">{{ $project->title }}</h1>
-                        <p class="text-gray-300 mb-8 leading-relaxed">{{ $project->description }}</p>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                            <div class="flex items-start space-x-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                    </svg>
+        @if(count($projects) > 0)
+            <div class="space-y-12">
+                @foreach($projects as $project)
+                    <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
+                        <div class="flex flex-col lg:flex-row">
+                            <!-- Project Image with fixed height and consistent aspect ratio -->
+                            <div class="lg:w-1/2 relative">
+                                <div class="h-full">
+                                    <div class="h-64 sm:h-80 lg:h-full w-full">
+                                        <img 
+                                            src="{{ $project->image ? asset('storage/' . $project->image) : asset('assets/img/donation1.jpg') }}" 
+                                            alt="{{ $project->title }}" 
+                                            class="w-full h-full object-cover"
+                                        >
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Location</h3>
-                                    <p class="text-white mt-1">{{ $project->location }}</p>
+                                <!-- Overlay badge for volunteers count -->
+                                <div class="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full text-sm font-medium">
+                                    {{ $volunteerData[$project->id]['count'] }} / {{ $project->volunteers_needed }} Volunteers
                                 </div>
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Date</h3>
-                                    <p class="text-white mt-1">{{ date('M d, Y', strtotime($project->start_date)) }} - {{ date('M d, Y', strtotime($project->end_date)) }}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Volunteers Needed</h3>
-                                    <p class="text-white mt-1">{{ $project->volunteers_needed }}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start space-x-3">
-                                <div class="flex-shrink-0 mt-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Status</h3>
-                                    <div class="mt-1">
-                                        <div class="w-full bg-gray-700 rounded-full h-2.5 mt-2">
-                                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: {{ ($volunteerCount / $project->volunteers_needed) * 100 }}%"></div>
+                            
+                            <!-- Project Details -->
+                            <div class="lg:w-1/2 p-6 sm:p-8 lg:p-10">
+                                <h1 class="text-2xl sm:text-3xl font-bold text-white mb-4">{{ $project->title }}</h1>
+                                <p class="text-gray-300 mb-8 leading-relaxed">{{ $project->description }}</p>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                            </svg>
                                         </div>
-                                        <p class="text-white text-sm mt-1">{{ $volunteerCount }} registered of {{ $project->volunteers_needed }} needed</p>
+                                        <div>
+                                            <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Location</h3>
+                                            <p class="text-white mt-1">{{ $project->location }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Date</h3>
+                                            <p class="text-white mt-1">{{ date('M d, Y', strtotime($project->start_date)) }} - {{ date('M d, Y', strtotime($project->end_date)) }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Volunteers Needed</h3>
+                                            <p class="text-white mt-1">{{ $project->volunteers_needed }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-yellow-500 font-semibold text-sm uppercase tracking-wider">Status</h3>
+                                            <div class="mt-1">
+                                                <div class="w-full bg-gray-700 rounded-full h-2.5 mt-2">
+                                                    <div class="bg-yellow-500 h-2.5 rounded-full" style="width: {{ ($volunteerData[$project->id]['count'] / $project->volunteers_needed) * 100 }}%"></div>
+                                                </div>
+                                                <p class="text-white text-sm mt-1">{{ $volunteerData[$project->id]['count'] }} registered of {{ $project->volunteers_needed }} needed</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                @auth
+                                    @if($volunteerData[$project->id]['hasVolunteered'])
+                                        <div class="bg-gray-700 rounded-xl p-5 text-center">
+                                            <div class="flex items-center justify-center mb-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <p class="font-medium text-white">You have already volunteered for this project!</p>
+                                            </div>
+                                            <div class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800">
+                                                <span class="text-sm mr-2">Status:</span>
+                                                <span class="text-sm font-bold {{ $volunteerData[$project->id]['status'] == 'approved' ? 'text-green-400' : ($volunteerData[$project->id]['status'] == 'rejected' ? 'text-red-400' : 'text-yellow-400') }}">
+                                                    {{ ucfirst($volunteerData[$project->id]['status']) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <form action="{{ route('volunteer.store') }}" method="POST" class="mt-8">
+                                            @csrf
+                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                            
+                                            <div class="mb-5">
+                                                <label for="message_{{ $project->id }}" class="block text-white text-sm font-medium mb-2">Message (Optional)</label>
+                                                <textarea 
+                                                    name="message" 
+                                                    id="message_{{ $project->id }}" 
+                                                    rows="3" 
+                                                    class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
+                                                    placeholder="Share why you're interested in volunteering for this project..."
+                                                ></textarea>
+                                            </div>
+                                            
+                                            <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105 flex items-center justify-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                                                </svg>
+                                                Volunteer Now
+                                            </button>
+                                        </form>
+                                    @endif
+                                @else
+                                    <div class="bg-gray-700 p-6 rounded-xl text-center mt-8">
+                                        <div class="mb-5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-yellow-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                            </svg>
+                                            <p class="text-white text-lg mb-4">Please sign in to volunteer for this project</p>
+                                        </div>
+                                        <a href="{{ route('login') }}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            Sign In
+                                        </a>
+                                    </div>
+                                @endauth
                             </div>
                         </div>
-                        
-                        @auth
-                            @if($hasVolunteered)
-                                <div class="bg-gray-700 rounded-xl p-5 text-center">
-                                    <div class="flex items-center justify-center mb-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        <p class="font-medium text-white">You have already volunteered for this project!</p>
-                                    </div>
-                                    <div class="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800">
-                                        <span class="text-sm mr-2">Status:</span>
-                                        <span class="text-sm font-bold {{ $volunteerStatus == 'approved' ? 'text-green-400' : ($volunteerStatus == 'rejected' ? 'text-red-400' : 'text-yellow-400') }}">
-                                            {{ ucfirst($volunteerStatus) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @else
-                                <form action="{{ route('volunteer.store') }}" method="POST" class="mt-8">
-                                    @csrf
-                                    <input type="hidden" name="project_id" value="{{ $project->id }}">
-                                    
-                                    <div class="mb-5">
-                                        <label for="message" class="block text-white text-sm font-medium mb-2">Message (Optional)</label>
-                                        <textarea 
-                                            name="message" 
-                                            id="message" 
-                                            rows="3" 
-                                            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-                                            placeholder="Share why you're interested in volunteering for this project..."
-                                        ></textarea>
-                                    </div>
-                                    
-                                    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105 flex items-center justify-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                                        </svg>
-                                        Volunteer Now
-                                    </button>
-                                </form>
-                            @endif
-                        @else
-                            <div class="bg-gray-700 p-6 rounded-xl text-center mt-8">
-                                <div class="mb-5">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-yellow-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                    <p class="text-white text-lg mb-4">Please sign in to volunteer for this project</p>
-                                </div>
-                                <a href="{{ route('login') }}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-200 transform hover:scale-105">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M3 3a1 1 0 011 1v12a1 1 0 11-2 0V4a1 1 0 011-1zm7.707 3.293a1 1 0 010 1.414L9.414 9H17a1 1 0 110 2H9.414l1.293 1.293a1 1 0 01-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                    </svg>
-                                    Sign In
-                                </a>
-                            </div>
-                        @endauth
                     </div>
-                </div>
+                @endforeach
             </div>
         @else
             <div class="bg-gray-800 rounded-2xl shadow-2xl p-10 text-center max-w-3xl mx-auto border border-gray-700">
@@ -278,10 +282,10 @@
         <h2 class="text-3xl font-bold text-white mb-6">Ready to Make a Difference?</h2>
         <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Join our team of dedicated volunteers and help us create positive change in our community.</p>
         
-        @if($project)
+        @if(count($projects) > 0)
             @auth
-                @if(!$hasVolunteered)
-                    <a href="#project" class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition">
+                @if(!$hasVolunteeredForAny)
+                    <a href="#current-project" class="inline-flex items-center px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition">
                         Volunteer Now
                     </a>
                 @else

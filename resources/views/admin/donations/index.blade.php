@@ -46,7 +46,7 @@
                 @endif
 
                 <!-- Filters Panel (hidden by default) -->
-                <div id="filtersPanel" class="bg-gray-700 rounded-lg p-4 mb-6 hidden">
+                <div id="filtersPanel" class="bg-gray-700 rounded-lg p-4 mb-6 {{ request()->anyFilled(['date_range', 'status', 'cause_id', 'min_amount', 'max_amount', 'payment_method']) ? '' : 'hidden' }}">
                     <form action="{{ route('admin.donations.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-1">Date Range</label>
@@ -88,8 +88,19 @@
                             </div>
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Payment Method</label>
+                            <select name="payment_method" class="w-full p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:border-yellow-500">
+                                <option value="">All Methods</option>
+                                <option value="credit_card" {{ request('payment_method') == 'credit_card' ? 'selected' : '' }}>Credit Card</option>
+                                <option value="bank_transfer" {{ request('payment_method') == 'bank_transfer' ? 'selected' : '' }}>Bank Transfer</option>
+                                <option value="cash" {{ request('payment_method') == 'cash' ? 'selected' : '' }}>Cash</option>
+                                <option value="mobile_payment" {{ request('payment_method') == 'mobile_payment' ? 'selected' : '' }}>Mobile Payment</option>
+                            </select>
+                        </div>
+
                         <div class="md:col-span-4 flex justify-end space-x-3">
-                            <button type="reset" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500">Clear</button>
+                            <a href="{{ route('admin.donations.index') }}" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500">Clear</a>
                             <button type="submit" class="px-4 py-2 bg-yellow-500 text-black rounded-md hover:bg-yellow-600">Apply Filters</button>
                         </div>
                     </form>
@@ -207,17 +218,25 @@
                                             </a>
                                             
                                             @if($donation->status == 'pending')
-                                            <form action="{{ route('admin.donations.update', $donation->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('PUT')
-                                                <input type="hidden" name="status" value="completed">
-                                                <button type="submit" class="text-green-400 hover:text-green-300" onclick="return confirm('Mark this donation as completed?')">
-                                                    <span class="sr-only">Complete</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                </button>
-                                            </form>
+                                            <button type="button" 
+                                                   class="text-green-400 hover:text-green-300 status-btn" 
+                                                   data-donation-id="{{ $donation->id }}" 
+                                                   data-status="completed">
+                                                <span class="sr-only">Complete</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </button>
+                                            
+                                            <button type="button" 
+                                                   class="text-red-400 hover:text-red-300 status-btn" 
+                                                   data-donation-id="{{ $donation->id }}" 
+                                                   data-status="cancelled">
+                                                <span class="sr-only">Cancel</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
                                             @endif
                                             
                                             @if($donation->email)
@@ -244,7 +263,7 @@
 
                 <!-- Pagination -->
                 <div class="mt-6">
-                    {{ $donations->links() }}
+                    {{ $donations->appends(request()->query())->links() }}
                 </div>
             </div>
         </div>
@@ -259,30 +278,186 @@
         filtersPanel.classList.toggle('hidden');
     });
 
+    // Add event listeners for status buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure we have the CSRF token in meta tag
+        const metaToken = document.querySelector('meta[name="csrf-token"]');
+        if (!metaToken) {
+            // Add CSRF token meta tag if it doesn't exist
+            const meta = document.createElement('meta');
+            meta.name = 'csrf-token';
+            meta.content = '{{ csrf_token() }}';
+            document.head.appendChild(meta);
+        }
+    
+        // Attach click handlers to all status buttons
+        const statusButtons = document.querySelectorAll('.status-btn');
+        statusButtons.forEach(button => {
+            // Store original text for resetting later
+            button.setAttribute('data-original-text', button.innerHTML);
+            
+            // Add click handler
+            button.addEventListener('click', function() {
+                const donationId = this.getAttribute('data-donation-id');
+                const newStatus = this.getAttribute('data-status');
+                
+                if (donationId && newStatus) {
+                    updateDonationStatus(donationId, newStatus);
+                }
+            });
+        });
+    });
+
+    // Function to update donation status via AJAX
+    function updateDonationStatus(donationId, newStatus) {
+        console.log('Updating donation', donationId, 'to status', newStatus);
+        
+        // Find button element for visual feedback
+        const button = document.querySelector(`button[data-donation-id="${donationId}"][data-status="${newStatus}"]`);
+        if (button) {
+            // Save original button content
+            const originalContent = button.innerHTML;
+            // Show loading spinner with Tailwind classes
+            button.innerHTML = '<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+            button.disabled = true;
+        }
+        
+        // Get CSRF token
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Make sure the URL is correct
+        fetch('/admin/donation-details/' + donationId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                status: newStatus
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Show small success message
+            const successToast = document.createElement('div');
+            successToast.className = 'fixed bottom-4 right-4 bg-green-800 text-green-100 px-4 py-2 rounded shadow-lg z-50';
+            successToast.textContent = `Status updated: ${ucfirst(newStatus)}`;
+            document.body.appendChild(successToast);
+            
+            // Update the UI to reflect the change
+            const row = button.closest('tr');
+            if (row) {
+                // Update the status cell (5th column - 0-indexed would be 4)
+                const statusCell = row.querySelector('td:nth-child(5) span');
+                if (statusCell) {
+                    // Update text
+                    statusCell.textContent = ucfirst(newStatus);
+                    
+                    // Remove all existing status classes
+                    statusCell.classList.remove('bg-green-900', 'text-green-200', 'bg-yellow-900', 'text-yellow-200', 'bg-red-900', 'text-red-200');
+                    
+                    // Add appropriate classes based on new status
+                    if (newStatus === 'completed') {
+                        statusCell.classList.add('bg-green-900', 'text-green-200');
+                    } else if (newStatus === 'pending') {
+                        statusCell.classList.add('bg-yellow-900', 'text-yellow-200');
+                    } else {
+                        statusCell.classList.add('bg-red-900', 'text-red-200');
+                    }
+                }
+                
+                // Hide the buttons since the status is now changed
+                row.querySelectorAll('.status-btn').forEach(btn => {
+                    btn.style.display = 'none';
+                });
+            }
+            
+            // Reload the page after 1 second to refresh any UI elements
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            
+            // Show error message
+            const errorToast = document.createElement('div');
+            errorToast.className = 'fixed bottom-4 right-4 bg-red-800 text-red-100 px-4 py-2 rounded shadow-lg z-50';
+            errorToast.textContent = 'Failed to update status';
+            document.body.appendChild(errorToast);
+            setTimeout(() => errorToast.remove(), 3000);
+            
+            // Reset button state if there was an error
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = button.getAttribute('data-original-text') || originalContent;
+            }
+        });
+    }
+
+    // Helper function to capitalize first letter
+    function ucfirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     // Function to send thank you email
     function sendThankYou(donationId) {
-        if(confirm('Send a thank you email to this donor?')) {
-            fetch("{{ url('admin/donations/thank-you') }}/" + donationId, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    alert('Thank you email sent successfully!');
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while sending the thank you email.');
-            });
-        }
+        // Create a loading indicator
+        const loadingToast = document.createElement('div');
+        loadingToast.className = 'fixed bottom-4 right-4 bg-blue-800 text-blue-100 px-4 py-2 rounded shadow-lg z-50 flex items-center';
+        loadingToast.innerHTML = `
+            <svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Sending email...
+        `;
+        document.body.appendChild(loadingToast);
+        
+        fetch("/admin/donation-details/thank-you/" + donationId, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Remove loading toast
+            loadingToast.remove();
+            
+            // Show result toast
+            const resultToast = document.createElement('div');
+            if(data.success) {
+                resultToast.className = 'fixed bottom-4 right-4 bg-green-800 text-green-100 px-4 py-2 rounded shadow-lg z-50';
+                resultToast.textContent = 'Thank you email sent';
+            } else {
+                resultToast.className = 'fixed bottom-4 right-4 bg-red-800 text-red-100 px-4 py-2 rounded shadow-lg z-50';
+                resultToast.textContent = data.message || 'Failed to send email';
+            }
+            document.body.appendChild(resultToast);
+            setTimeout(() => resultToast.remove(), 3000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            
+            // Remove loading toast
+            loadingToast.remove();
+            
+            // Show error toast
+            const errorToast = document.createElement('div');
+            errorToast.className = 'fixed bottom-4 right-4 bg-red-800 text-red-100 px-4 py-2 rounded shadow-lg z-50';
+            errorToast.textContent = 'Failed to send email';
+            document.body.appendChild(errorToast);
+            setTimeout(() => errorToast.remove(), 3000);
+        });
     }
 </script>
 @endsection

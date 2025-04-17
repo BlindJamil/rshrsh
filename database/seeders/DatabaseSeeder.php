@@ -19,5 +19,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Run these seeders for database initialization
+        $this->call([
+            RoleSeeder::class,     // This will create the admin roles
+            AdminUserSeeder::class, // This will create the admin user and assign the role
+        ]);
     }
 }

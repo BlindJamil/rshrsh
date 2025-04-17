@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Causes')
+@section('title', 'Campaign')
 
 @section('content')
 
@@ -75,7 +75,7 @@
         <div class="absolute inset-0 flex items-center justify-center">
             <div class="text-center px-4 lg:px-0">
                 <span class="inline-block px-4 py-1 bg-yellow-500 text-black text-sm font-semibold rounded-full mb-4">Donate With Us</span>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Our Causes</h1>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Our Campaigns</h1>
                 <p class="text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
                     Our mission is to empower communities, promote change, and inspire hope through meaningful initiatives and dedicated efforts.
                 </p>
@@ -85,9 +85,9 @@
 </section>
 
 <main class="container mx-auto max-w-[100%] py-20 bg-gradient-to-r from-gray-800 via-gray-900 to-black">
-    <!-- Recent Donations Section -->
+    <!-- Recent Campaigns Section -->
     <div class="text-center mb-12">
-        <h2 class="text-white text-4xl font-bold">Recent Donations</h2>
+        <h2 class="text-white text-4xl font-bold">Recent Campaigns</h2>
         <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
             Support our recent campaigns and help us respond to urgent needs in our communities.
         </p>
@@ -147,13 +147,13 @@
     </div>
     @else
     <div class="text-center text-gray-400 mb-16">
-        <p>No recent donation campaigns currently available.</p>
+        <p>No recent campaigns currently available.</p>
     </div>
     @endif
     
-    <!-- General Causes Section -->
+    <!-- Donation Field Section -->
     <div class="text-center mb-12 mt-32">
-        <h2 class="text-white text-4xl font-bold">General Causes</h2>
+        <h2 class="text-white text-4xl font-bold">Donation Field</h2>
         <p class="text-gray-400 mt-4 max-w-2xl mx-auto">
             Choose a cause to support and make a meaningful impact in the lives of those who need it most.
         </p>

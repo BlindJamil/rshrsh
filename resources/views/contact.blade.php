@@ -46,8 +46,8 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">Our Address</h3>
-                            <p class="text-gray-400">1230 Maecenas Street, Donec Road</p>
-                            <p class="text-gray-400">New York, EEUU</p>
+                            <p class="text-gray-400">Tishk International University</p>
+                            <p class="text-gray-400">Erbil, Kurdistan</p>
                         </div>
                     </div>
                     
@@ -59,8 +59,8 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">Email Us</h3>
-                            <p class="text-gray-400">info@example.com</p>
-                            <p class="text-gray-400">support@example.com</p>
+                            <p class="text-gray-400">tiu@tishk.edu.iq</p>
+                            <p class="text-gray-400">contact@tishk.edu.iq</p>
                         </div>
                     </div>
                     
@@ -72,8 +72,8 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">Call Us</h3>
-                            <p class="text-gray-400">Mobile: +1 (123) 456-7890</p>
-                            <p class="text-gray-400">Hotline: +1 (800) 123-4567</p>
+                            <p class="text-gray-400">Mobile: +964 (750) 749-8920</p>
+                            <p class="text-gray-400">Mobile: +964 (782) 441-2345</p>
                         </div>
                     </div>
                     
@@ -85,8 +85,8 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold text-white mb-1">Working Hours</h3>
-                            <p class="text-gray-400">Monday - Friday: 08:00 - 17:00</p>
-                            <p class="text-gray-400">Saturday & Sunday: 08:00 - 12:00</p>
+                            <p class="text-gray-400">Sunday - Thursday: 09:00 - 17:00</p>
+                            <p class="text-gray-400">Saturday & Sunday: 09:00 - 17:00</p>
                         </div>
                     </div>
                 </div>

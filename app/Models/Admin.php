@@ -1,19 +1,107 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Models;
 
-use Closure;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
 
-class IsAdmin
+class Admin extends Authenticatable
 {
-    public function handle(Request $request, Closure $next)
-    {
-        if (Auth::check() && Auth::user()->is_admin) {
-            return $next($request);
-        }
+    use HasFactory, Notifiable;
 
-        return abort(403, 'Unauthorized');
+    protected $table = 'admin_users';
+    
+    protected $guard = 'admin';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    /**
+     * Get the name of the unique identifier for the user.
+     *
+     * @return string
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
+
+    /**
+     * Get the unique identifier for the user.
+     *
+     * @return mixed
+     */
+    public function getAuthIdentifier()
+    {
+        return $this->{$this->getAuthIdentifierName()};
+    }
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Get the column name for the "remember me" token.
+     *
+     * @return string
+     */
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'admin_role_user', 'admin_user_id', 'admin_role_id');
+    }
+
+    public function hasRole($role)
+    {
+        if (is_string($role)) {
+            return $this->roles->where('name', $role)->count();
+        }
+        return !! $role->intersect($this->roles)->count();
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->roles()->where('name', 'super_admin')->exists();
+    }
+
+    public function assignRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+        $this->roles()->syncWithoutDetaching($role);
+    }
+
+    public function removeRole($role)
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+        $this->roles()->detach($role);
     }
 }
