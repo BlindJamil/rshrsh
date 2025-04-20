@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
+use App\Traits\AdminAuditLog;
 
 class Admin extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, AdminAuditLog;
 
     protected $table = 'admin_users';
     
@@ -84,9 +85,47 @@ class Admin extends Authenticatable
         return !! $role->intersect($this->roles)->count();
     }
 
+    public function hasPermission($permission)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasAnyPermission($permissions)
+    {
+        if (is_string($permissions)) {
+            $permissions = [$permissions];
+        }
+
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasAllPermissions($permissions)
+    {
+        if (is_string($permissions)) {
+            $permissions = [$permissions];
+        }
+
+        foreach ($permissions as $permission) {
+            if (!$this->hasPermission($permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function isSuperAdmin()
     {
-        return $this->roles()->where('name', 'super_admin')->exists();
+        return $this->hasRole('super_admin');
     }
 
     public function assignRole($role)
@@ -103,5 +142,13 @@ class Admin extends Authenticatable
             $role = Role::where('name', $role)->firstOrFail();
         }
         $this->roles()->detach($role);
+    }
+
+    public function syncRoles($roles)
+    {
+        if (is_array($roles)) {
+            $roles = Role::whereIn('name', $roles)->get();
+        }
+        $this->roles()->sync($roles);
     }
 }

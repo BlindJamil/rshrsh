@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class AdminUserSeeder extends Seeder
 {
@@ -14,11 +15,11 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create default admin user
+        // Get admin credentials from environment variables or use defaults
         $admin = [
-            'name' => 'Super Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('admin123'),
+            'name' => env('ADMIN_NAME', 'Administrator'),
+            'email' => env('ADMIN_EMAIL', 'admin@example.com'),
+            'password' => Hash::make(env('ADMIN_PASSWORD', Str::random(16))), // Generate random password if not set
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -30,6 +31,13 @@ class AdminUserSeeder extends Seeder
         if (!$existingAdmin) {
             // Insert admin user and get the ID
             $adminId = DB::table('admin_users')->insertGetId($admin);
+            
+            // Output the generated credentials if using defaults
+            if (!env('ADMIN_PASSWORD')) {
+                $this->command->info('Generated admin credentials:');
+                $this->command->info('Email: ' . $admin['email']);
+                $this->command->info('Password: Please set ADMIN_PASSWORD in your .env file');
+            }
         } else {
             $adminId = $existingAdmin->id;
         }
