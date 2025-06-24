@@ -175,13 +175,14 @@
             <!-- Team Member 1 -->
             <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg group">
                 <div class="relative overflow-hidden h-72">
-                    <img src="{{ asset('assets/img/donation1.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
+                    <img src="{{ asset('assets/img/2c1072de-73a2-4a16-a552-79825a915ce9.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
                     <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition duration-300"></div>
                 </div>
+                
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Sarah Johnson</h3>
-                    <p class="text-yellow-500 mb-4">Executive Director</p>
-                    <p class="text-gray-400 text-sm mb-4">Leading our organization with vision and compassion since 2018.</p>
+                    <h3 class="text-xl font-bold text-white mb-1">Blind Jamil Sabri</h3>
+                    <p class="text-yellow-500 mb-4">Lead Programmer</p>
+                    <p class="text-gray-400 text-sm mb-4">A talented programmer who overcame visual impairment to become an inspiration in tech accessibility and inclusive development.</p>
                     <div class="flex justify-center space-x-3">
                         <a href="#" class="text-gray-400 hover:text-yellow-500">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fillRule="evenodd" clipRule="evenodd"></path></svg>
@@ -200,13 +201,13 @@
             <!-- Team Member 2 -->
             <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg group">
                 <div class="relative overflow-hidden h-72">
-                    <img src="{{ asset('assets/img/donation3.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
+                    <img src="{{ asset('assets/img/rshrsh.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
                     <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition duration-300"></div>
                 </div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Michael Chen</h3>
-                    <p class="text-yellow-500 mb-4">Program Director</p>
-                    <p class="text-gray-400 text-sm mb-4">Overseeing our initiatives with expertise and dedication.</p>
+                    <h3 class="text-xl font-bold text-white mb-1">Rashwan A. Abduljabar</h3>
+                    <p class="text-yellow-500 mb-4">Team Leader & Manager</p>
+                    <p class="text-gray-400 text-sm mb-4">A visionary leader with extensive experience in project management and team coordination, driving our initiatives forward with strategic insight and dedication.</p>
                     <div class="flex justify-center space-x-3">
                         <a href="#" class="text-gray-400 hover:text-yellow-500">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fillRule="evenodd" clipRule="evenodd"></path></svg>
@@ -224,13 +225,13 @@
             <!-- Additional team members would be added here -->
             <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg group">
                 <div class="relative overflow-hidden h-72">
-                    <img src="{{ asset('assets/img/donation1.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
+                    <img src="{{ asset('assets/img/download.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
                     <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition duration-300"></div>
                 </div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Sarah Johnson</h3>
-                    <p class="text-yellow-500 mb-4">Executive Director</p>
-                    <p class="text-gray-400 text-sm mb-4">Leading our organization with vision and compassion since 2018.</p>
+                    <h3 class="text-xl font-bold text-white mb-1">Avin Sabri</h3>
+                    <p class="text-yellow-500 mb-4">Designer</p>
+                    <p class="text-gray-400 text-sm mb-4">A creative designer with a keen eye for aesthetics and user experience, bringing innovative design solutions to our digital presence and brand identity.</p>
                     <div class="flex justify-center space-x-3">
                         <a href="#" class="text-gray-400 hover:text-yellow-500">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fillRule="evenodd" clipRule="evenodd"></path></svg>
@@ -247,13 +248,13 @@
 
             <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg group">
                 <div class="relative overflow-hidden h-72">
-                    <img src="{{ asset('assets/img/donation1.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
+                    <img src="{{ asset('assets/img/profile_photo-400x400.jpg') }}" alt="Team Member" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-300">
                     <div class="absolute inset-0 bg-black bg-opacity-20 group-hover:bg-opacity-40 transition duration-300"></div>
                 </div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Sarah Johnson</h3>
-                    <p class="text-yellow-500 mb-4">Executive Director</p>
-                    <p class="text-gray-400 text-sm mb-4">Leading our organization with vision and compassion since 2018.</p>
+                    <h3 class="text-xl font-bold text-white mb-1">Dr. Hala Najwan</h3>
+                    <p class="text-yellow-500 mb-4">Project Supervisor</p>
+                    <p class="text-gray-400 text-sm mb-4">An experienced academic supervisor and mentor with expertise in project management and research methodology, providing valuable guidance and oversight to ensure project success.</p>
                     <div class="flex justify-center space-x-3">
                         <a href="#" class="text-gray-400 hover:text-yellow-500">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fillRule="evenodd" clipRule="evenodd"></path></svg>

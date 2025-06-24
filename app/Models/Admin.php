@@ -85,15 +85,14 @@ class Admin extends Authenticatable
         return !! $role->intersect($this->roles)->count();
     }
 
-    public function hasPermission($permission)
-    {
-        foreach ($this->roles as $role) {
-            if ($role->hasPermission($permission)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    // app/Models/Admin.php
+
+public function hasPermission($permission)
+{
+    return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
+        $query->where('name', $permission);
+    })->exists();
+}
 
     public function hasAnyPermission($permissions)
     {

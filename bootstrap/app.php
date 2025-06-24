@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\CheckPermission; // <-- Add this use statement
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -11,9 +12,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register middleware alias
+        // Register middleware aliases
         $middleware->alias([
             'admin' => IsAdmin::class,
+            'permission' => CheckPermission::class, // <-- ADD THIS LINE
         ]);
 
         $middleware->prependToGroup('web', \App\Http\Middleware\AutoLogout::class);

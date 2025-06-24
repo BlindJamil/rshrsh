@@ -45,10 +45,22 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-10 w-10 flex-shrink-0">
-                                                <img class="h-10 w-10 rounded-full object-cover" src="{{ $project->image ? asset('storage/' . $project->image) : asset('assets/img/donation1.jpg') }}" alt="">
+                                                @if($project->image)
+                                                    <img class="h-10 w-10 rounded-full object-cover" 
+                                                         src="{{ asset('storage/' . $project->image) }}" 
+                                                         alt="{{ $project->title }}"
+                                                         onerror="this.onerror=null; this.src='{{ asset('assets/img/donation1.jpg') }}';">
+                                                @else
+                                                    <img class="h-10 w-10 rounded-full object-cover" 
+                                                         src="{{ asset('assets/img/donation1.jpg') }}" 
+                                                         alt="{{ $project->title }}">
+                                                @endif
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-white">{{ $project->title }}</div>
+                                                @if($project->image)
+                                                    <div class="text-xs text-gray-400">Image: {{ $project->image }}</div>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>

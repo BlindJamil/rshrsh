@@ -44,7 +44,7 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 - **[Cyber-Duck](https://cyber-duck.co.uk)**
 - **[DevSquad](https://devsquad.com/hire-laravel-developers)**
 - **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
+- **[Redberry](https://redberry.int ernational/laravel/)**
 - **[Active Logic](https://activelogic.com)**
 - **[byte5](https://byte5.de)**
 - **[OP.GG](https://op.gg)**

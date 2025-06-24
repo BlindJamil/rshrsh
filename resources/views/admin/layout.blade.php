@@ -23,6 +23,8 @@
                     Contact Messages</a>
                 </li>
                 <li>
+                    {{-- Add this line below --}}
+                <li><a href="{{ route('admin.admins.index') }}" class="text-white hover:text-yellow-500 transition">Admin Management</a></li>
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="text-red-500 hover:text-red-400">

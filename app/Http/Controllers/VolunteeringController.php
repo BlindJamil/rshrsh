@@ -121,10 +121,17 @@ class VolunteeringController extends Controller
         
         // Handle image upload
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('projects', 'public');
+            try {
+                $path = $request->file('image')->store('projects', 'public');
+                $data['image'] = $path;
+                \Log::info('Image uploaded successfully. Path: ' . $path);
+            } catch (\Exception $e) {
+                \Log::error('Image upload failed: ' . $e->getMessage());
+                return redirect()->back()->with('error', 'Failed to upload image: ' . $e->getMessage());
+            }
         }
         
-        Project::create($data);
+        $project = Project::create($data);
         
         return redirect()->route('admin.projects.index')
             ->with('success', 'Project created successfully.');
